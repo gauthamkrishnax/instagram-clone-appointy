@@ -218,5 +218,4 @@ func main() {
 	// -----------------------------------------------------------------------------
 
 	http.ListenAndServe(secretPort, r)
-	fmt.Println("Server listening on port : ", secretPort)
 }

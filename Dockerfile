@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 
-EXPOSE 9000
+EXPOSE 3000
 
 RUN go build -o main .
 
