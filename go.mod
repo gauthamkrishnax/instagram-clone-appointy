@@ -1,4 +1,4 @@
-module src
+module github.com/gauthamkrishnax/instagram-clone-appointy
 
 go 1.17
 
