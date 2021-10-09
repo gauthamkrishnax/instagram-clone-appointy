@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -106,6 +107,25 @@ func main() {
 
 	r.Methods(http.MethodGet).Handler(`/posts/users/:id`, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
+		//PAGINATION
+
+		r.ParseForm()
+		var limit int64 = 10
+		var skip int64 = 0
+
+		if len(r.Form) > 0 {
+			for k, v := range r.Form {
+				if k == "skip" {
+					skip, _ = strconv.ParseInt(v[0], 10, 64)
+				}
+				if k == "limit" {
+					limit, _ = strconv.ParseInt(v[0], 10, 64)
+				}
+			}
+		}
+
+		multiOptions := options.Find().SetLimit(limit).SetSkip(skip)
+
 		id := GetParam(r.Context(), "id")
 		collection := client.Database("instadb").Collection("posts")
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -115,7 +135,8 @@ func main() {
 		filter := bson.M{"userID": id}
 
 		var result []bson.M
-		findCursor, err := collection.Find(ctx, filter)
+
+		findCursor, err := collection.Find(ctx, filter, multiOptions)
 		findCursor.All(ctx, &result)
 		j, _ := json.Marshal(result)
 
@@ -196,5 +217,6 @@ func main() {
 
 	// -----------------------------------------------------------------------------
 
-	http.ListenAndServe(":9999", r)
+	http.ListenAndServe(secretPort, r)
+	fmt.Println("Server listening on port : ", secretPort)
 }
