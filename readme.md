@@ -7,8 +7,7 @@
 ## Installation
 
 1. Clone this repo
-2. Cd to repo directory and create a secrets.go file
-
+2. Cd to repo directory and create a secrets.go file [I am giving out secrets for easy testing]
 ```
 package main
 var secretDbURI string = "mongodb+srv://samplemongouri.net/"
