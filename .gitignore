@@ -14,5 +14,5 @@
 # vendor/
 
 .env
-# secrets.go
+secrets.go
 vendor
